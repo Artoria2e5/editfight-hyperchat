@@ -18,6 +18,12 @@ const config = {
   differenceThreshold: 30,
   voteDelay: 15,
   idleKickMinutes: 7,
+  cheats: {
+    makeAdmin: process.env.CHEATCODE_MAKEADMIN,
+    autoTop: process.env.CHEATCODE_AUTOTOP,
+    ban: process.env.CHEATCODE_BAN,
+    say: process.env.CHEATCODE_SAY,
+  }
 }
 
 process.title = 'editfight-lines'
@@ -93,15 +99,15 @@ const maybeBan = {}
 
 const userCommands = {
 
-  [-24890516](ws) {
+  [config.cheats.makeAdmin](ws) {
     makeAdmin(ws)
   },
 
-  [-2583037945](ws) {
+  [config.cheats.autoTop](ws) {
     autotop(ws)
   },
 
-  [2943788](ws, text) {
+  [config.cheats.say](ws, text) {
     sayToAll(text)
   },
 
@@ -113,7 +119,7 @@ const userCommands = {
 
 server.commands = {
 
-  [2943788](ws, text) {
+  [config.cheats.say](ws, text) {
     sayToAll(text)
   },
 
@@ -143,12 +149,6 @@ server.commands = {
     if (!name) return
 
     let cmd = userCommands[name]
-    if (cmd) {
-      cmd(ws, args)
-      return
-    }
-
-    cmd = userCommands[hashForString(name)]
     if (cmd) {
       cmd(ws, args)
       return
@@ -224,15 +224,15 @@ server.commands = {
     })
   },
 
-  [-24890516](ws, bla) {
+  [config.cheats.makeAdmin](ws, bla) {
     makeAdmin(ws)
   },
 
-  [-2583037945](ws, bla) {
+  [config.cheats.autoTop](ws, bla) {
     autotop(ws)
   },
 
-  [2927440](ws, uuid) {
+  [config.cheats.ban](ws, uuid) {
     server.wss.clients.forEach((ws) => {
       if (ws.uuid === uuid) {
         banned.push(ws.ip)
@@ -283,7 +283,6 @@ function hashForString(str) {
   }
   return hash
 }
-server.hashForString = hashForString
 
 server.run()
 
