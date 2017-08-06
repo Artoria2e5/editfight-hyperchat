@@ -807,9 +807,10 @@
     }
 
     function colorForHash(hash) {
-      const hue = hash % 360
-      const sat = Math.abs(hash) % 30 + 5
-      const light = Math.abs(hash) % 20 + 40
+      const uhash = hash < 0 ? hash + 4294967296 : hash
+      const hue = (uhash >>> 8) % 360
+      const sat = (uhash >>> 4) % 30 + 5
+      const light = uhash % 20 + 40
       return `hsl(${hue}, ${sat}%, ${light}%)`
     }
 
